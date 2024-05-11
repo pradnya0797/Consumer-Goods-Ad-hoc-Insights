@@ -123,20 +123,21 @@ Month
 Year
 Gross sales Amount */
 
-SELECT CONCAT(MONTHNAME(s.date), ' (', Year(s.date), ')')
-       AS
-       month,
-       s.fiscal_year,
-       CONCAT(Round(Sum(( g.gross_price * s.sold_quantity )) / 1000000, 2), 'M')
-       AS
+SELECT Concat(Monthname(f.date), ' (', Year(f.date), ')')                    AS
+       'Month'
+       ,
+       f.fiscal_year,
+       Concat(Round(Sum(g.gross_price * f.sold_quantity) / 1000000, 2), 'M') AS
        gross_sales_amount
-FROM   fact_gross_price g
-       JOIN fact_sales_monthly s using(product_code, fiscal_year)
-       JOIN dim_customer c using(customer_code)
-WHERE  c.customer = "Atliq Exclusive"
-GROUP  BY s.date,
-          s.fiscal_year
-ORDER  BY s.fiscal_year
+FROM   fact_sales_monthly f
+       JOIN dim_customer c
+         ON f.customer_code = c.customer_code
+       JOIN fact_gross_price g
+         ON f.product_code = g.product_code
+WHERE  C.customer = 'Atliq Exclusive'
+GROUP  BY month,
+          f.fiscal_year
+ORDER  BY f.fiscal_year
 
 
 /* 8. In which quarter of 2020, got the maximum total_sold_quantity? The final
