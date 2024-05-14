@@ -14,11 +14,12 @@ WHERE  customer = "Atliq Exclusive"
 		unique_products_2021
 		percentage_chg  */
 
-WITH cte1 AS
+WITH CTE1 AS
 (
        SELECT Count(DISTINCT product_code) AS unique_product_2020
        FROM   fact_sales_monthly
-       WHERE  fiscal_year="2020" ), cte2 AS
+       WHERE  fiscal_year="2020" ), 
+CTE2 AS
 (
        SELECT Count(DISTINCT product_code) AS unique_product_2021
        FROM   fact_sales_monthly
@@ -26,8 +27,8 @@ WITH cte1 AS
 SELECT c1.unique_product_2020,
        c2.unique_product_2021,
        Round((c2.unique_product_2021-c1.unique_product_2020)*100/c1.unique_product_2020,2) AS percentage_chg
-FROM   cte1 c1
-JOIN   cte2 c2	
+FROM   CTE1 c1
+JOIN   CTE2 c2	
 
 
 /*3. Provide a report with all the unique product counts for each segment and
@@ -50,14 +51,14 @@ product_count_2020
 product_count_2021
 difference */ 
 
-WITH cte1
+WITH CTE1
      AS (SELECT p.segment,
                 Count(DISTINCT s.product_code) AS product_count_2020
          FROM   fact_sales_monthly s
                 JOIN dim_product p using(product_code)
          WHERE  s.fiscal_year = "2020"
          GROUP  BY p.segment),
-     cte2
+     CTE2
      AS (SELECT p.segment,
                 Count(DISTINCT s.product_code) AS product_count_2021
          FROM   fact_sales_monthly s
@@ -68,8 +69,8 @@ SELECT c1.segment,
        product_count_2020,
        product_count_2021,
        ( product_count_2021 - product_count_2020 ) AS Difference
-FROM   cte1 c1
-       JOIN cte2 c2
+FROM   CTE1 c1
+       JOIN CTE2 c2
          ON c1.segment = c2.segment
 ORDER  BY difference DESC 
 
