@@ -15,7 +15,7 @@ other countries too. However, the management noticed that they do not get enough
 
 ## Tools Used
 1. MySQL (for queries)
-2. PowerBI (for visualizations)
+2. Microsoft PowerBI (for visualizations)
 3. Canva (for presentation)
 
 ## Key Insights
